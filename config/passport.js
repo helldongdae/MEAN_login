@@ -1,5 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy
 var User = require('../models/user');
+var Schedule = require('../models/schedule');
 module.exports = function(passport) {
     passport.serializeUser(function(user, done) {
         done(null, user.id);
@@ -27,6 +28,20 @@ module.exports = function(passport) {
                 newUser.name = req.body.name;
                 newUser.email = email;
                 newUser.password = newUser.generateHash(password); 
+		newUser.master = false;
+		var newSchedule = {
+			"day": "NONE",
+			"first": "NONE",
+			"second": "NONE",
+			"third": "NONE",
+			"fourth": "NONE",
+			"fifth": "NONE",
+			"sixth": "NONE",
+			"seventh": "NONE",
+			"eighth": "NONE",
+			"ninth": "NONE",
+		};
+		newUser.schedule.push(newSchedule);
                 newUser.save(function(err) {
                     if (err)
                         throw err;
