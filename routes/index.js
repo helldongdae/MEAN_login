@@ -6,13 +6,14 @@ var WebSocketS = require("ws").Server;
 var wss = new WebSocketS({ port: 3000 });
 var Schedule = require('../models/schedule');
 var User = require('../models/user');
+var Patient = require('../models/patient');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 module.exports = function(app)
 {
     app.get('/',function(req,res){
         fs.readFile('views/index.html', function(err, data) {
-			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 			res.write(data);
 			res.end();
 	 	});
@@ -93,6 +94,56 @@ module.exports = function(app)
 					}
     			});
 				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>sixth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].sixth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>seventh</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].seventh);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>seventh</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].seventh);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>eighth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].eighth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>ninth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].ninth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n</tr>');
 				res.write('</table>');
 				res.end();
 			});	
@@ -125,6 +176,40 @@ module.exports = function(app)
 		res.end();
     });
 
+	app.get('/view_patient',function(req,res){
+		res.writeHead(200, {'Content-Type': 'text/html'});
+		res.write('N   N  G  M  H  W<br>');
+		Patient.find ({}, function (err, patients){
+				patients.forEach(function(patient) {
+      					res.write(patient.name);
+						res.write('  ');
+						if (patient.ndt == true)
+							res.write('  O');
+						else
+							res.write('  X');
+						res.write('  ');
+						if (patient.gait == true)
+							res.write('  O');
+						else
+							res.write('  X');
+						if (patient.mat == true)
+							res.write('  O');
+						else
+							res.write('  X');
+						if (patient.heat == true)
+							res.write('  O');
+						else
+							res.write('  X');
+						if (patient.water == true)
+							res.write('  O');
+						else
+							res.write('  X');
+						res.write('<br>');
+    			});
+				res.end();
+		});
+    });
+
 	app.post('/login', urlencodedParser, passport.authenticate('login', {
 	    successRedirect : '/success', 
 	    failureRedirect : '/fail',
@@ -150,5 +235,22 @@ module.exports = function(app)
 				res.redirect('/success');
 			});
 		});			
+	})
+
+	app.post('/signup_patient', urlencodedParser, function(req,res){
+		console.log(req.body);
+		var newPatient = new Patient();
+		newPatient.name = req.body.name;
+		newPatient.gender = req.body.gender;
+		newPatient.ndt = req.body.ndt;
+		newPatient.gait = req.body.gait;
+		newPatient.mat = req.body.mat;
+		newPatient.heat = req.body.heat;
+		newPatient.water = req.body.water;
+		newPatient.save(function(err) {
+                    if (err)
+                        throw err;
+                });
+		res.redirect('/');	
 	})
 }

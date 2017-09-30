@@ -5,6 +5,7 @@ var userSchema = mongoose.Schema({
     email : String,
     password : String,
 	master: Boolean,
+	certificate: Boolean,
 	schedule: [{
 		day: String,
 		first: String,
