@@ -19,7 +19,8 @@ table tr:nth-child(even) {
 
 <div ng-app="myApp" ng-controller="customersCtrl"> 
 
-<button id="button1" onclick="button1_click();">Add new schedule</button> 
+<button id="button1" onclick="button1_click();">일정 추가하기</button> <br>
+<button id="button2" onclick="button2_click();">일정 초기화하기</button> 
 
 <script>
   // 웹소켓 전역 객체 생성
@@ -42,15 +43,69 @@ table tr:nth-child(even) {
 
   function button1_click() {
 	if(is_master == "master")
-		location.href="/addSchedule";
+		location.href="/algorithm";
 	else
 		alert("This is only for master");
   }
+
+  function button2_click() {
+	location.href = "/reset";
+  }
+
+
 </script>
 
 
-</div>
-
+</div><br>
+<form action="/move_date" method="post">
+<select name="month">
+    	<option value="1">1</option>
+    	<option value="2">2</option>
+    	<option value="3">3</option>
+    	<option value="4">4</option>
+    	<option value="5">5</option>
+    	<option value="6">6</option>
+    	<option value="7">7</option>
+    	<option value="8">8</option>
+    	<option value="9">9</option>
+    	<option value="10">10</option>
+    	<option value="11">11</option>
+    	<option value="12">12</option>
+  	</select>월
+<select name="date">
+    	<option value="1">1</option>
+    	<option value="2">2</option>
+    	<option value="3">3</option>
+    	<option value="4">4</option>
+    	<option value="5">5</option>
+    	<option value="6">6</option>
+    	<option value="7">7</option>
+    	<option value="8">8</option>
+    	<option value="9">9</option>
+    	<option value="10">10</option>
+    	<option value="11">11</option>
+    	<option value="12">12</option>
+    	<option value="13">13</option>
+    	<option value="14">14</option>
+    	<option value="15">15</option>
+    	<option value="16">16</option>
+    	<option value="17">17</option>
+    	<option value="18">18</option>
+    	<option value="19">19</option>
+    	<option value="20">20</option>
+    	<option value="21">21</option>
+    	<option value="22">22</option>
+    	<option value="23">23</option>
+    	<option value="24">24</option>
+    	<option value="25">25</option>
+    	<option value="26">26</option>
+    	<option value="27">27</option>
+    	<option value="28">28</option>
+    	<option value="29">29</option>
+    	<option value="30">30</option>
+    	<option value="31">31</option>
+  	</select>일<br>
+<input type="submit" value="날짜 이동"><br></form>
 </body>
 </html>
 

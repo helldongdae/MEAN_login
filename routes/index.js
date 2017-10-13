@@ -33,7 +33,15 @@ module.exports = function(app)
 		});
 		var times = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
         fs.readFile('views/main.html', function(err, data) {
-			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+			var datetime = new Date();
+			var month = (datetime.getMonth());
+			month += 1;
+			var date = (datetime.getDate());
+			res.write(month.toString());
+			res.write("월");
+			res.write(date.toString());
+			res.write("일");
 			res.write(data);
 			if(usr.master == true)
 				res.write("Logged in as master\n");
@@ -114,15 +122,6 @@ module.exports = function(app)
 					}
     			});
 				res.write('\n</tr>');
-				res.write('\n<tr>\n <th>seventh</th>\n ');
-				users.forEach(function(user) {
-					if(user.email != 'master'){
-						res.write('  <th>');
-      					res.write(user.schedule[0].seventh);
-						res.write('</th>');
-					}
-    			});
-				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>eighth</th>\n ');
 				users.forEach(function(user) {
 					if(user.email != 'master'){
@@ -177,7 +176,7 @@ module.exports = function(app)
     });
 
 	app.get('/view_patient',function(req,res){
-		res.writeHead(200, {'Content-Type': 'text/html'});
+		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 		res.write('N   N  G  M  H  W<br>');
 		Patient.find ({}, function (err, patients){
 				patients.forEach(function(patient) {
@@ -237,6 +236,136 @@ module.exports = function(app)
 		});			
 	})
 
+	app.post('/move_date', urlencodedParser, function(req,res){
+		var usr = JSON.parse(JSON.stringify(req.user));
+		wss.on("connection", function(ws) {
+			if(usr.master){
+  				ws.send("master");
+			}
+			else
+				ws.send("user");
+  			ws.on("message", function(message) {
+    			console.log("Received: %s", message);
+  			});
+		});
+		var times = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
+        fs.readFile('views/main.html', function(err, data) {
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+			var datetime = new Date();
+			var month = (datetime.getMonth());
+			month += 1;
+			var date = (datetime.getDate());
+			res.write(req.body.month.toString());
+			res.write("월");
+			res.write(req.body.date.toString());
+			res.write("일");
+			res.write(data);
+			if(usr.master == true)
+				res.write("Logged in as master\n");
+			else
+				res.write("Logged in as user\n");
+			res.write('<table>\n<tr>\n <th>Time</th>\n ');
+			User.find ({}, function (err, users){
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.email);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>first</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].first);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>second</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].second);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>third</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].third);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>fourth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].fourth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>fifth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].fifth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>sixth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].sixth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>seventh</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].seventh);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>eighth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].eighth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n<tr>\n <th>ninth</th>\n ');
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('  <th>');
+      					res.write(user.schedule[0].ninth);
+						res.write('</th>');
+					}
+    			});
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('\n</tr>');
+				res.write('</table>');
+				res.end();
+			});	
+	 	});
+	})
+
 	app.post('/signup_patient', urlencodedParser, function(req,res){
 		console.log(req.body);
 		var newPatient = new Patient();
@@ -252,5 +381,745 @@ module.exports = function(app)
                         throw err;
                 });
 		res.redirect('/');	
+	})
+
+	app.get('/algorithm', function(req, res){
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == true && patient.ndt == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.gait == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.mat == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.heat == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.water == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.hand == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+
+		Patient.find ({}, function (err, patients){
+			patients.forEach(function(patient) {
+				console.log(patient.name)
+				User.find ({}, function (err, users){
+					users.forEach(function(user) {
+						if(user.certificate == false && patient.sca == true){
+							if(user.schedule[0].first == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].first = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].second == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].second = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].third == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].third = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fourth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fourth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].fifth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].fifth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].sixth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].sixth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].seventh == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].seventh = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].eighth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].eighth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+							else if(user.schedule[0].ninth == 'NONE'){
+								User.findOne({ 'email' : user.email }, function(err, user) {
+									console.log(user)
+									user.schedule[0].ninth = patient.name;
+									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    									if (err) console.log(err)
+											console.log('updated schedule')
+									});
+								});
+							}
+						}
+					});
+				});	
+			});
+		});
+		res.redirect('/success');	
+	})
+
+	app.get('/reset', function(req, res){
+		User.find ({}, function (err, users){
+			users.forEach(function(user) {
+				if(user.email != "master"){
+				user.schedule[0].first = "NONE"; 
+				user.schedule[0].second = "NONE";
+				user.schedule[0].third = "NONE";
+				user.schedule[0].fourth = "NONE";
+				user.schedule[0].fifth = "NONE";
+				user.schedule[0].sixth = "NONE";
+				user.schedule[0].seventh = "NONE";
+				user.schedule[0].eighth = "NONE";
+				user.schedule[0].ninth = "NONE";
+
+				User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+    				if (err) console.log(err)
+				});		
+				}		
+			});
+			res.redirect('/success');
+		});	
 	})
 }
