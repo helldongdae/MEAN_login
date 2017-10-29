@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="ISO-8859-1"> 
+</head>
+<h1> 환자 등록 </h1>
+<form action="/signup_patient" method="post">
+
+  <div>
+    <h4>이름</h4>
+    <input type="text" name="name"/>
+  </div>
+
+  <div>
+	<h4>성별</h4>
+    <input type="radio" name="gender" value="male" checked> 남자 
+    <input type="radio" name="gender" value="female"> 여자<br>
+  </div>
+<br>
+  <div>
+	<h4>비 작업치료</h4>
+  </div>
+  <div>
+	<label>NDT:</label>
+    <input type="radio" name="ndt" value="true" checked> 해당 
+    <input type="radio" name="ndt" value="false"> 비해당<br>
+  </div>
+
+  <div>
+	<label>GAIT:</label>
+    <input type="radio" name="gait" value="true" checked> 해당 
+    <input type="radio" name="gait" value="false"> 비해당<br>
+  </div>
+
+  <div>
+	<label>매트치료:</label>
+    <input type="radio" name="mat" value="true" checked> 해당 
+    <input type="radio" name="mat" value="false"> 비해당<br>
+  </div>
+
+  <div>
+	<label>열 치료:</label>
+    <input type="radio" name="heat" value="true" checked> 해당 
+    <input type="radio" name="heat" value="false"> 비해당<br>
+  </div>
+
+  <div>
+	<label>수중 치료:</label>
+    <input type="radio" name="water" value="true" checked> 해당 
+    <input type="radio" name="water" value="false"> 비해당<br>
+  </div>
+<br>
+  <div>
+	<h4>작업치료</h4> 
+  </div>
+  <div>
+	<label>특수작업치료:</label>
+    <input type="radio" name="special" value="true" checked> 해당 
+    <input type="radio" name="special" value="false"> 비해당<br>
+  </div>
+  <div>
+	<label>복합작업치료:</label>
+    <input type="radio" name="special_comb" value="true" checked> 해당 
+    <input type="radio" name="special_comb" value="false"> 비해당<br>
+  </div>
+  <div>
+	<label>연하장애치료:</label>
+    <input type="radio" name="tongue" value="true" checked> 해당 
+    <input type="radio" name="tongue" value="false"> 비해당<br>
+  </div>
+  <div>
+	<label>인지치료:</label>
+    <input type="radio" name="aware" value="true" checked> 해당 
+    <input type="radio" name="aware" value="false"> 비해당<br>
+  </div>
+  <div>
+	<label>일상생활 치료:</label>
+    <input type="radio" name="common" value="true" checked> 해당 
+    <input type="radio" name="common" value="false"> 비해당<br>
+  </div>
+  <div>
+    <input type="submit" value="등록하기"/>
+  </div>
+</form>
+
+<div>
+<form action="/view_patient" method="get">
+	<input type="submit" value="전체 환자 보기" 
+    onclick="window.location='/view_patient';" />     
+</form>
+</div>
+
+</html>

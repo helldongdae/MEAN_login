@@ -24,26 +24,11 @@ table tr:nth-child(even) {
 <button id="button3" onclick="button3_click();">일정 교환하기</button> 
 
 <script>
-  // 웹소켓 전역 객체 생성
-  var ws = new WebSocket("ws://localhost:3000");
-  var is_master = false;
-  // 연결이 수립되면 서버에 메시지를 전송한다
-  ws.onopen = function(event) {
-    ;
-  }
-
-  // 서버로 부터 메시지를 수신한다
-  ws.onmessage = function(event) {
-	is_master = event.data;
-  }
-
-  // error event handler
-  ws.onerror = function(event) {
-    console.log("Server error message: ", event.data);
-  }
-
   function button1_click() {
+	if(is_master == "master")
 		location.href="/algorithm";
+	else
+		alert("This is only for master");
   }
 
   function button2_click() {
@@ -53,7 +38,6 @@ table tr:nth-child(even) {
   function button3_click() {
 	location.href = "/exchange";
   }
-
 
 </script>
 

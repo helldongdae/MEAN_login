@@ -12,7 +12,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 module.exports = function(app)
 {
     app.get('/',function(req,res){
-        fs.readFile('views/index.html', function(err, data) {
+        fs.readFile('views/help.html', function(err, data) {
 			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 			res.write(data);
 			res.end();
@@ -20,7 +20,7 @@ module.exports = function(app)
     });
 
 	app.get('/success', urlencodedParser,function(req,res){
-		var usr = JSON.parse(JSON.stringify(req.user));
+		/*var usr = JSON.parse(JSON.stringify(req.user));
 		wss.on("connection", function(ws) {
 			if(usr.master){
   				ws.send("master");
@@ -30,7 +30,7 @@ module.exports = function(app)
   			ws.on("message", function(message) {
     			console.log("Received: %s", message);
   			});
-		});
+		});*/
 		var times = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
         fs.readFile('views/main.html', function(err, data) {
 			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
@@ -43,11 +43,11 @@ module.exports = function(app)
 			res.write(date.toString());
 			res.write("일");
 			res.write(data);
-			if(usr.master == true)
+			/*if(usr.master == true)
 				res.write("Logged in as master\n");
 			else
 				res.write("Logged in as user\n");
-			res.write('<table>\n<tr>\n <th>Time</th>\n ');
+			*/res.write('<table>\n<tr>\n <th>Time</th>\n ');
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
 					if(user.email != 'master'){
@@ -175,6 +175,57 @@ module.exports = function(app)
 		res.end();
     });
 
+	app.get('/exchange',function(req,res){
+        fs.readFile('views/exchange.html', function(err, data) {
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+			res.write(data)
+			User.find ({}, function (err, users){
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('<option value=');
+						res.write('"')
+						res.write(user.email)
+						res.write('">')
+      					res.write(user.email);
+						res.write('</option>\n')
+					}
+    			});
+			res.write('</select><select name = "user1_time"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>')
+			res.write('<br>User2<br>')
+			res.write('<select name = "user2"')
+				users.forEach(function(user) {
+					if(user.email != 'master'){
+						res.write('<option value=');
+						res.write('"')
+						res.write(user.email)
+						res.write('">')
+      					res.write(user.email);
+						res.write('</option>\n')
+					}
+    			});
+			res.write('</select><select name = "user2_time"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>')
+				res.write('<br><input type="submit" value="change"><br></form>')
+				res.end();
+			});	
+	 	});
+    });
+
+	app.get('/register_patient',function(req,res){
+        fs.readFile('views/register_patient.html', function(err, data) {
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+			res.write(data);
+			res.end();
+	 	});
+    });
+
+	app.get('/register_doctor',function(req,res){
+        fs.readFile('views/register_doctor.html', function(err, data) {
+			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+			res.write(data);
+			res.end();
+	 	});
+    });
+
 	app.get('/view_patient',function(req,res){
 		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
 		res.write('N   N  G  M  H  W<br>');
@@ -237,7 +288,7 @@ module.exports = function(app)
 	})
 
 	app.post('/move_date', urlencodedParser, function(req,res){
-		var usr = JSON.parse(JSON.stringify(req.user));
+		/*var usr = JSON.parse(JSON.stringify(req.user));
 		wss.on("connection", function(ws) {
 			if(usr.master){
   				ws.send("master");
@@ -247,7 +298,7 @@ module.exports = function(app)
   			ws.on("message", function(message) {
     			console.log("Received: %s", message);
   			});
-		});
+		})*/;
 		var times = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
         fs.readFile('views/main.html', function(err, data) {
 			res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
@@ -260,11 +311,11 @@ module.exports = function(app)
 			res.write(req.body.date.toString());
 			res.write("일");
 			res.write(data);
-			if(usr.master == true)
+			/*if(usr.master == true)
 				res.write("Logged in as master\n");
 			else
 				res.write("Logged in as user\n");
-			res.write('<table>\n<tr>\n <th>Time</th>\n ');
+			*/res.write('<table>\n<tr>\n <th>Time</th>\n ');
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
 					if(user.email != 'master'){

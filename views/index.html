@@ -37,60 +37,10 @@
   </div>
 </form>
 
-<br><div> 환자 등록 </div>
-<form action="/signup_patient" method="post">
-
-  <div>
-    <label>이름:</label>
-    <input type="text" name="name"/>
-  </div>
-
-  <div>
-	<label>성별:</label>
-    <input type="radio" name="gender" value="male" checked> 남자 
-    <input type="radio" name="gender" value="female"> 여자<br>
-  </div>
-
-  <div>
-	<label>NDT:</label>
-    <input type="radio" name="ndt" value="true" checked> 해당 
-    <input type="radio" name="ndt" value="false"> 비해당<br>
-  </div>
-
-  <div>
-	<label>GAIT:</label>
-    <input type="radio" name="gait" value="true" checked> 해당 
-    <input type="radio" name="gait" value="false"> 비해당<br>
-  </div>
-
-  <div>
-	<label>MAT:</label>
-    <input type="radio" name="mat" value="true" checked> 해당 
-    <input type="radio" name="mat" value="false"> 비해당<br>
-  </div>
-
-  <div>
-	<label>HEAT:</label>
-    <input type="radio" name="heat" value="true" checked> 해당 
-    <input type="radio" name="heat" value="false"> 비해당<br>
-  </div>
-
-  <div>
-	<label>WATER:</label>
-    <input type="radio" name="water" value="true" checked> 해당 
-    <input type="radio" name="water" value="false"> 비해당<br>
-  </div>
-
-
-  <div>
-    <input type="submit" value="등록하기"/>
-  </div>
-</form>
-
 <div>
-<form action="/view_patient" method="get">
-	<input type="submit" value="전체 환자 보기" 
-    onclick="window.location='/view_patient';" />     
+<form action="/register_patient" method="get">
+	<input type="submit" value="환자 등록하기" 
+    onclick="window.location='/register_patient';" />     
 </form>
 </div>
 
