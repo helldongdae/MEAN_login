@@ -50,16 +50,16 @@ module.exports = function(app)
 			*/res.write('<table>\n<tr>\n <th>Time</th>\n ');
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
-      					res.write(user.email);
+      					res.write(user.name);
 						res.write('</th>');
 					}
     			});
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>first</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].first);
 						res.write('</th>');
@@ -68,7 +68,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>second</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].second);
 						res.write('</th>');
@@ -77,7 +77,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>third</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].third);
 						res.write('</th>');
@@ -86,7 +86,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>fourth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].fourth);
 						res.write('</th>');
@@ -95,7 +95,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>fifth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].fifth);
 						res.write('</th>');
@@ -105,7 +105,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>sixth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].sixth);
 						res.write('</th>');
@@ -115,7 +115,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>seventh</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].seventh);
 						res.write('</th>');
@@ -124,7 +124,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>eighth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].eighth);
 						res.write('</th>');
@@ -133,7 +133,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>ninth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].ninth);
 						res.write('</th>');
@@ -156,11 +156,11 @@ module.exports = function(app)
 			res.write("User:<br>\n <select name=\"user\">\n");
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write("<option value=\"");
-      					res.write(user.email);
+      					res.write(user.name);
 						res.write("\">");
-						res.write(user.email);
+						res.write(user.name);
 						res.write("</option>\" \n");
 					}
 				});
@@ -181,12 +181,12 @@ module.exports = function(app)
 			res.write(data)
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('<option value=');
 						res.write('"')
-						res.write(user.email)
+						res.write(user.name)
 						res.write('">')
-      					res.write(user.email);
+      					res.write(user.name);
 						res.write('</option>\n')
 					}
     			});
@@ -194,12 +194,12 @@ module.exports = function(app)
 			res.write('<br>User2<br>')
 			res.write('<select name = "user2"')
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('<option value=');
 						res.write('"')
-						res.write(user.email)
+						res.write(user.name)
 						res.write('">')
-      					res.write(user.email);
+      					res.write(user.name);
 						res.write('</option>\n')
 					}
     			});
@@ -272,14 +272,76 @@ module.exports = function(app)
 	    failureFlash : false 
 	}))
 
+	app.post('/register_doctor', urlencodedParser, function(req,res){
+		User.findOne({ 'name' : req.body.name }, function(err, user) {
+			console.log(user)
+			if (user != null){
+				res.redirect('/register_doctor_fail')
+				return
+			}	
+			var newUser = new User();
+			newUser.name = req.body.name;
+			newUser.certificate = req.body.certificate;
+			newUser.master = false;
+			var newSchedule = {
+				"day": "NONE",
+				"first": "NONE",
+				"second": "NONE",
+				"third": "NONE",
+				"fourth": "NONE",
+				"fifth": "NONE",
+				"sixth": "NONE",
+				"seventh": "NONE",
+				"eighth": "NONE",
+				"ninth": "NONE",
+			};
+			newUser.schedule.push(newSchedule);
+			newUser.save(function(err) {
+        		if (err)
+            		res.redirect('/register_doctor_fail')
+       	 	});
+			res.redirect('/register_doctor_success')
+		})
+	})
+
+	app.get('/register_doctor_success',function(req,res){
+		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+		res.write('Success');
+		res.end();
+    });
+
+	app.get('/register_doctor_fail',function(req,res){
+		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+		res.write('Fail');
+		res.end();
+    });
+
+	app.get('/view_doctors',function(req,res){
+		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+		User.find ({}, function (err, users){
+				users.forEach(function(user) {
+					if(user.name != 'master'){
+      					res.write(user.name);
+						if (user.certificate == true){
+							res.write(' certificate<br>')
+						}
+						else{
+							res.write(' no certificate<br>')
+						}
+					}
+    			});
+				res.end();
+		})
+    });
+
 	app.post('/add_schedule', urlencodedParser, function(req,res){
 		console.log(req.body);
-		User.findOne({ 'email' : req.body.user }, function(err, user) {
+		User.findOne({ 'name' : req.body.user }, function(err, user) {
 			console.log(user)
 			var usr = req.body.user;
 			var time = req.body.time;
 			user.schedule[0][time] = req.body.name;
-			User.findOneAndUpdate({ 'email' : req.body.user }, user, {upsert:true}, function(err, doc){
+			User.findOneAndUpdate({ 'name' : req.body.user }, user, {upsert:true}, function(err, doc){
     			if (err) console.log(err)
 				console.log('updated schedule')
 				res.redirect('/success');
@@ -318,16 +380,16 @@ module.exports = function(app)
 			*/res.write('<table>\n<tr>\n <th>Time</th>\n ');
 			User.find ({}, function (err, users){
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
-      					res.write(user.email);
+      					res.write(user.name);
 						res.write('</th>');
 					}
     			});
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>first</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].first);
 						res.write('</th>');
@@ -336,7 +398,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>second</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].second);
 						res.write('</th>');
@@ -345,7 +407,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>third</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].third);
 						res.write('</th>');
@@ -354,7 +416,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>fourth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].fourth);
 						res.write('</th>');
@@ -363,7 +425,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>fifth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].fifth);
 						res.write('</th>');
@@ -373,7 +435,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>sixth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].sixth);
 						res.write('</th>');
@@ -383,7 +445,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>seventh</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].seventh);
 						res.write('</th>');
@@ -392,7 +454,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>eighth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].eighth);
 						res.write('</th>');
@@ -401,7 +463,7 @@ module.exports = function(app)
 				res.write('\n</tr>');
 				res.write('\n<tr>\n <th>ninth</th>\n ');
 				users.forEach(function(user) {
-					if(user.email != 'master'){
+					if(user.name != 'master'){
 						res.write('  <th>');
       					res.write(user.schedule[0].ninth);
 						res.write('</th>');
@@ -442,90 +504,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == true && patient.ndt == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -544,90 +606,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.gait == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -646,90 +708,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.mat == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -748,90 +810,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.heat == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -850,90 +912,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.water == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -952,90 +1014,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.hand == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -1054,90 +1116,90 @@ module.exports = function(app)
 					users.forEach(function(user) {
 						if(user.certificate == false && patient.sca == true){
 							if(user.schedule[0].first == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].first = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].second == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].second = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].third == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].third = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fourth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fourth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].fifth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].fifth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].sixth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].sixth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].seventh == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].seventh = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].eighth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].eighth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
 								});
 							}
 							else if(user.schedule[0].ninth == 'NONE'){
-								User.findOne({ 'email' : user.email }, function(err, user) {
+								User.findOne({ 'name' : user.name }, function(err, user) {
 									console.log(user)
 									user.schedule[0].ninth = patient.name;
-									User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+									User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     									if (err) console.log(err)
 											console.log('updated schedule')
 									});
@@ -1154,7 +1216,7 @@ module.exports = function(app)
 	app.get('/reset', function(req, res){
 		User.find ({}, function (err, users){
 			users.forEach(function(user) {
-				if(user.email != "master"){
+				if(user.name != "master"){
 				user.schedule[0].first = "NONE"; 
 				user.schedule[0].second = "NONE";
 				user.schedule[0].third = "NONE";
@@ -1165,7 +1227,7 @@ module.exports = function(app)
 				user.schedule[0].eighth = "NONE";
 				user.schedule[0].ninth = "NONE";
 
-				User.findOneAndUpdate({ 'email' : user.email }, user, {upsert:true}, function(err, doc){
+				User.findOneAndUpdate({ 'name' : user.name }, user, {upsert:true}, function(err, doc){
     				if (err) console.log(err)
 				});		
 				}		
