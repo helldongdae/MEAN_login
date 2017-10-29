@@ -228,37 +228,39 @@ module.exports = function(app)
 
 	app.get('/view_patient',function(req,res){
 		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-		res.write('N   N  G  M  H  W<br>');
+		res.write('<table><tr><th>이름</th></tr>');
 		Patient.find ({}, function (err, patients){
-				patients.forEach(function(patient) {
-      					res.write(patient.name);
-						res.write('  ');
-						if (patient.ndt == true)
-							res.write('  O');
-						else
-							res.write('  X');
-						res.write('  ');
-						if (patient.gait == true)
-							res.write('  O');
-						else
-							res.write('  X');
-						if (patient.mat == true)
-							res.write('  O');
-						else
-							res.write('  X');
-						if (patient.heat == true)
-							res.write('  O');
-						else
-							res.write('  X');
-						if (patient.water == true)
-							res.write('  O');
-						else
-							res.write('  X');
-						res.write('<br>');
+				patients.forEach(function(user) {
+					res.write('<tr><th>')
+      				res.write(user.name);
+					res.write('</th>')
+					res.write('</tr>')
     			});
+				res.write('</table><h3>환자 삭제하기</h3>')
+				res.write('<form action="/erase_patient" method="post">')
+				res.write('<select name="user">')
+				patients.forEach(function(user) {
+					if(user.name != 'master'){
+						res.write('<option value=');
+						res.write('"')
+						res.write(user.name)
+						res.write('">')
+      					res.write(user.name);
+						res.write('</option>\n')
+					}
+    			});
+				res.write('</select>')
+				res.write('<input type="submit" value="삭제하기"/></form>')
 				res.end();
-		});
+		})
     });
+
+	app.post('/erase_patient', urlencodedParser, function(req,res){
+		Patient.remove({ 'name' : req.body.user }, function(err, user) {
+			console.log('Removed')
+			res.redirect('/view_patient')
+		});			
+	})
 
 	app.post('/login', urlencodedParser, passport.authenticate('login', {
 	    successRedirect : '/success', 
@@ -318,21 +320,45 @@ module.exports = function(app)
 
 	app.get('/view_doctors',function(req,res){
 		res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+		res.write('<table><tr><th>이름</th><th>자격증</th></tr>');
 		User.find ({}, function (err, users){
 				users.forEach(function(user) {
+					res.write('<tr><th>')
+      				res.write(user.name);
+					res.write('</th><th>')
+					if (user.certificate == true){
+						res.write('O')
+					}
+					else{
+						res.write('X')
+					}
+					res.write('</th></tr>')
+    			});
+				res.write('</table><h3>의사 삭제하기</h3>')
+				res.write('<form action="/erase_doctor" method="post">')
+				res.write('<select name="user">')
+				users.forEach(function(user) {
 					if(user.name != 'master'){
+						res.write('<option value=');
+						res.write('"')
+						res.write(user.name)
+						res.write('">')
       					res.write(user.name);
-						if (user.certificate == true){
-							res.write(' certificate<br>')
-						}
-						else{
-							res.write(' no certificate<br>')
-						}
+						res.write('</option>\n')
 					}
     			});
+				res.write('</select>')
+				res.write('<input type="submit" value="삭제하기"/></form>')
 				res.end();
 		})
     });
+
+	app.post('/erase_doctor', urlencodedParser, function(req,res){
+		User.remove({ 'name' : req.body.user }, function(err, user) {
+			console.log('Removed')
+			res.redirect('/view_doctors')
+		});			
+	})
 
 	app.post('/add_schedule', urlencodedParser, function(req,res){
 		console.log(req.body);
